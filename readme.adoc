@@ -1,1 +1,12 @@
 == Project Task Index
+* Run the project
+* Setup DB basic config
+** H2
+** MySQL
+* Create Basic controller
+* Setup Swagger
+** Swagger CRUD UI
+** JWT Authentication
+* Configure the Spring Security
+** JWT
+** URL Based ACL
