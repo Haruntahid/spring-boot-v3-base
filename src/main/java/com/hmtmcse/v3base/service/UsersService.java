@@ -34,11 +34,16 @@ public class UsersService {
         boolean idExist = usersRepository.findById(id).isPresent();
         if(idExist) {
             Users existingUser = usersRepository.findById(id).get();
-            existingUser.setEmail(user.getEmail());
-            existingUser.setFullName(user.getFullName());
-            existingUser.setPassword(user.getPassword());
-            usersRepository.save(existingUser);
-            return true;
+
+            if(!existingUser.getEmail().equals(user.getEmail())) {
+                return false;
+            }else{
+                // existingUser.setEmail(user.getEmail());
+                existingUser.setFullName(user.getFullName());
+                existingUser.setPassword(user.getPassword());
+                usersRepository.save(existingUser);
+                return true;
+            }
         }else{
             return false;
         }
