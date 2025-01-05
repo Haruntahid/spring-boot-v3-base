@@ -1,24 +1,52 @@
 package com.hmtmcse.v3base.service;
 
+import com.hmtmcse.v3base.model.entity.UserPrincipal;
 import com.hmtmcse.v3base.model.entity.Users;
 import com.hmtmcse.v3base.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UsersService {
+public class UsersService implements UserDetailsService {
 
     @Autowired
     private UsersRepository usersRepository;
+
+//    @Autowired
+//    AuthenticationManager authManager;
+
+    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10);
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+        Users user = usersRepository.findByFullName(username);
+
+        if(user == null) {
+            System.out.println("user not found");
+            throw new UsernameNotFoundException("user not found");
+        }
+        return new UserPrincipal(user);
+    }
+
+
 
     // create a user
     public boolean save(Users user) {
         if(usersRepository.findByEmail(user.getEmail()).isPresent()) {
             return false;
         }else {
+            user.setPassword(encoder.encode(user.getPassword()));
              usersRepository.save(user);
             return true;
         }
@@ -61,5 +89,12 @@ public class UsersService {
         }
     }
 
+
+//    public String verify(Users user) {
+//        Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getFullName(), user.getPassword()));
+//        if(authentication.isAuthenticated()) return "Success";
+//
+//        return "Failed";
+//    }
 
 }

@@ -16,8 +16,9 @@ public class UsersController {
     @Autowired
     private UsersService usersService;
 
+
     // create a user
-    @PostMapping("/user")
+    @PostMapping("/register")
     public ResponseEntity<?> addUser(@RequestBody Users user) {
         boolean isCreated = usersService.save(user);
         if (isCreated) {
@@ -26,6 +27,14 @@ public class UsersController {
             return ResponseEntity.badRequest().body("User already exists");
         }
     }
+
+    // login a user
+    @PostMapping("/login")
+    public String  login(@RequestBody Users user) {
+        System.out.println(user);
+        return "Successfully logged in";
+    }
+
 
     // find all user
     @GetMapping("/user")
