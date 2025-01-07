@@ -5,6 +5,7 @@ import com.hmtmcse.v3base.service.UsersService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,6 +37,7 @@ public class UsersController {
 
 
     // find all user
+    //@PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/user")
     public List<Users> getUser() {
         return usersService.findAllUsers();

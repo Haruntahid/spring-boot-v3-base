@@ -34,8 +34,10 @@ public class SecurityConfig {
                         .csrf(customize -> customize.disable())
                         .authorizeHttpRequests(request ->
                                 request.requestMatchers("register", "login").permitAll()
+                                        .requestMatchers("user").hasRole("ADMIN")
                                         .anyRequest().authenticated())
                         //.formLogin(Customizer.withDefaults())
+                        // .authorizeHttpRequests(request -> request.requestMatchers("/api/v1/gerTechTeam").hasRole("ROLE_ADMIN"))
                         .httpBasic(Customizer.withDefaults())
                         .sessionManagement(session
                                 -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
